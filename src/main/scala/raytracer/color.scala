@@ -6,6 +6,7 @@ class color(val red: Double, val green: Double, val blue: Double) {
       case c: color => utils.float_equals(this.red, c.red) &&
         utils.float_equals(this.green, c.green) &&
         utils.float_equals(this.blue, c.blue)
+      case _ => false
     }
   }
 

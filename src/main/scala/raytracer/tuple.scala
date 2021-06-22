@@ -1,12 +1,30 @@
 package raytracer
 
-class tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
+class tuple(var x: Double, var y: Double, var z: Double, var w: Double) {
+  def apply(i: Int): Double = {
+    i match {
+      case 0 => this.x
+      case 1 => this.y
+      case 2 => this.z
+      case 3 => this.w
+    }
+  }
+
+  def update(i: Int, item: Double) : Unit = {
+    i match {
+      case 0 => this.x = item
+      case 1 => this.y = item
+      case 2 => this.z = item
+      case 3 => this.w = item
+    }
+  }
+
   def is_point() : Boolean = {
-    utils.float_equals(w, 1.0)
+    utils.float_equals(this.w, 1.0)
   }
 
   def is_vector() : Boolean = {
-    utils.float_equals(w, 0.0)
+    utils.float_equals(this.w, 0.0)
   }
 
   override def equals(obj: Any): Boolean = {
@@ -15,6 +33,7 @@ class tuple(val x: Double, val y: Double, val z: Double, val w: Double) {
         utils.float_equals(this.y, t.y) &&
         utils.float_equals(this.z, t.z) &&
         utils.float_equals(this.w, t.w)
+      case _ => false
     }
   }
 
