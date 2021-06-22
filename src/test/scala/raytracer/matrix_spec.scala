@@ -321,4 +321,132 @@ class matrix_spec extends AnyFreeSpec {
       assert(C * B.inverse() == A)
     }
   }
+  "A translation" - {
+    "can move a point" in {
+      val transform = new translation(5,-3,2)
+      val p = new point(-3,4,5)
+      assert(transform * p == new point(2,1,7))
+    }
+    "can move a point in reverse" in {
+      val transform = new translation(5,-3,2)
+      val inv = transform.inverse()
+      val p = new point(-3,4,5)
+      assert(inv * p == new point(-8,7,3))
+    }
+    "does not affect vectors" in {
+      val transform = new translation(5,-3,2)
+      val v = new vector(-3,4,5)
+      assert(transform * v == v)
+    }
+  }
+  "A scaling" - {
+    "can move a point" in {
+      val transform = new scaling(2,3,4)
+      val p = new point(-4,6,8)
+      assert(transform * p == new point(-8,18,32))
+    }
+    "can resize a vector" in {
+      val transform = new scaling(2,3,4)
+      val v = new vector(-4,6,8)
+      assert(transform * v == new vector(-8,18,32))
+    }
+    "can scale a vector in reverse" in {
+      val transform = new scaling(2,3,4)
+      val inv = transform.inverse()
+      val v = new vector(-4,6,8)
+      assert(inv * v == new vector(-2,2,2))
+    }
+    "can reflect a point" in {
+      val transform = new scaling(-1,1,1)
+      val p = new point(2,3,4)
+      assert(transform * p == new point(-2,3,4))
+    }
+  }
+  "A rotation_x" - {
+    "can rotate a point around the x axis" in {
+      val p = new point(0,1,0)
+      val half_quarter = new rotation_x(math.Pi/4)
+      val full_quarter = new rotation_x(math.Pi/2)
+      assert(half_quarter * p == new point(0, math.sqrt(2)/2, math.sqrt(2)/2))
+      assert(full_quarter * p == new point(0,0,1))
+    }
+    "can rotate in the opposite direction" in {
+      val p = new point(0,1,0)
+      val half_quarter = new rotation_x(math.Pi/4)
+      val inv = half_quarter.inverse()
+      assert(inv * p == new point(0, math.sqrt(2)/2, -math.sqrt(2)/2))
+    }
+  }
+  "A rotation_y" - {
+    "can rotate a point around the y axis" in {
+      val p = new point(0,0,1)
+      val half_quarter = new rotation_y(math.Pi/4)
+      val full_quarter = new rotation_y(math.Pi/2)
+      assert(half_quarter * p == new point(math.sqrt(2)/2, 0, math.sqrt(2)/2))
+      assert(full_quarter * p == new point(1,0,0))
+    }
+  }
+  "A rotation_z" - {
+    "can rotate a point around the z axis" in {
+      val p = new point(0,1,0)
+      val half_quarter = new rotation_z(math.Pi/4)
+      val full_quarter = new rotation_z(math.Pi/2)
+      assert(half_quarter * p == new point(-math.sqrt(2)/2, math.sqrt(2)/2, 0))
+      assert(full_quarter * p == new point(-1,0,0))
+    }
+  }
+  "A shearing" - {
+    "moves x in proportion to y" in {
+      val transform = new shearing(1,0,0,0,0,0)
+      val p = new point(2,3,4)
+      assert(transform * p == new point(5,3,4))
+    }
+    "moves x in proportion to z" in {
+      val transform = new shearing(0,1,0,0,0,0)
+      val p = new point(2,3,4)
+      assert(transform * p == new point(6,3,4))
+    }
+    "moves y in proportion to x" in {
+      val transform = new shearing(0,0,1,0,0,0)
+      val p = new point(2,3,4)
+      assert(transform * p == new point(2,5,4))
+    }
+    "moves y in proportion to z" in {
+      val transform = new shearing(0,0,0,1,0,0)
+      val p = new point(2,3,4)
+      assert(transform * p == new point(2,7,4))
+    }
+    "moves z in proportion to x" in {
+      val transform = new shearing(0,0,0,0,1,0)
+      val p = new point(2,3,4)
+      assert(transform * p == new point(2,3,6))
+    }
+    "moves z in proportion to y" in {
+      val transform = new shearing(0,0,0,0,0,1)
+      val p = new point(2,3,4)
+      assert(transform * p == new point(2,3,7))
+    }
+  }
+  "All transformations" - {
+    "can be applied in sequence" in {
+      val p = new point(1,0,1)
+      val A = new rotation_x(math.Pi/2)
+      val B = new scaling(5,5,5)
+      val C = new translation(10,5,7)
+      val p2 = A * p
+      assert(p2 == new point(1,-1,0))
+      val p3 = B * p2
+      assert(p3 == new point(5,-5,0))
+      val p4 = C * p3
+      assert(p4 == new point(15,0,7))
+    }
+    "can be chained in reverse order" in {
+      val p = new point(1,0,1)
+      val A = new rotation_x(math.Pi/2)
+      val B = new scaling(5,5,5)
+      val C = new translation(10,5,7)
+      val T = C * B * A
+      assert(T * p == new point(15,0,7))
+    }
+  }
 }

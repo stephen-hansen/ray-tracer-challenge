@@ -130,6 +130,60 @@ class matrix(val contents: Array[Array[Double]]) {
   }
 }
 
+class translation(val x: Double, val y: Double, val z: Double) extends matrix(
+  Array(
+    Array(1,0,0,x),
+    Array(0,1,0,y),
+    Array(0,0,1,z),
+    Array(0,0,0,1),
+  )
+)
+
+class scaling(val x: Double, val y: Double, val z: Double) extends matrix(
+  Array(
+    Array(x,0,0,0),
+    Array(0,y,0,0),
+    Array(0,0,z,0),
+    Array(0,0,0,1),
+  )
+)
+
+class rotation_x(val r: Double) extends matrix(
+  Array(
+    Array(1,0,0,0),
+    Array(0,math.cos(r),-math.sin(r),0),
+    Array(0,math.sin(r),math.cos(r),0),
+    Array(0,0,0,1),
+  )
+)
+
+class rotation_y(val r: Double) extends matrix(
+  Array(
+    Array(math.cos(r),0,math.sin(r),0),
+    Array(0,1,0,0),
+    Array(-math.sin(r),0,math.cos(r),0),
+    Array(0,0,0,1),
+  )
+)
+
+class rotation_z(val r: Double) extends matrix(
+  Array(
+    Array(math.cos(r),-math.sin(r),0,0),
+    Array(math.sin(r),math.cos(r),0,0),
+    Array(0,0,1,0),
+    Array(0,0,0,1),
+  )
+)
+
+class shearing(val xy: Double, val xz: Double, val yx: Double, val yz: Double, val zx: Double, val zy: Double) extends matrix(
+  Array(
+    Array(1,xy,xz,0),
+    Array(yx,1,yz,0),
+    Array(zx,zy,1,0),
+    Array(0,0,0,1),
+  )
+)
+
 object matrix {
   val identity_matrix : matrix = new matrix(
     Array(
