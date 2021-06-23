@@ -4,17 +4,17 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Paths}
 
 object world_app extends App {
-  val floor = new sphere()
+  val floor = new plane()
   floor.transform = new scaling(10,0.01,10)
   floor.material = new material()
   floor.material.color = new color(1, 0.9, 0.9)
   floor.material.specular = 0
 
-  val left_wall = new sphere()
+  val left_wall = new plane()
   left_wall.transform = new translation(0,0,5) * new rotation_y(-math.Pi/4) * new rotation_x(math.Pi/2) * new scaling(10,0.01,10)
   left_wall.material = floor.material
 
-  val right_wall = new sphere()
+  val right_wall = new plane()
   right_wall.transform = new translation(0,0,5) * new rotation_y(math.Pi/4) * new rotation_x(math.Pi/2) * new scaling(10,0.01,10)
   right_wall.material = floor.material
 

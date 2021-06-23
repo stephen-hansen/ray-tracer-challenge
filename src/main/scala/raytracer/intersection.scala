@@ -1,6 +1,6 @@
 package raytracer
 
-class intersection(val t: Double, val `object`: scene_object) {
+class intersection(val t: Double, val `object`: shape) {
   def prepare_computations(r: ray): computations = {
     val comps = new computations()
     comps.t = Some(this.t)

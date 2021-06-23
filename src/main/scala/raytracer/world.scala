@@ -2,16 +2,16 @@ package raytracer
 
 class world {
   var light : Option[point_light] = None
-  private var objects : Vector[scene_object] = Vector()
+  private var objects : Vector[shape] = Vector()
   val length: Int = objects.length
   val size: Int = length
-  def apply(i: Int): scene_object = {
+  def apply(i: Int): shape = {
     objects(i)
   }
-  def add_object(s: scene_object): Unit = {
+  def add_object(s: shape): Unit = {
     objects = objects :+ s
   }
-  def contains(s: scene_object): Boolean = {
+  def contains(s: shape): Boolean = {
     objects.contains(s)
   }
   def intersect_world(r: ray): intersections = {

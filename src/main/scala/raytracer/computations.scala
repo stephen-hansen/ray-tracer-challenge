@@ -2,7 +2,7 @@ package raytracer
 
 class computations() {
   var t: Option[Double] = None
-  var `object`: Option[scene_object] = None
+  var `object`: Option[shape] = None
   var point: Option[point] = None
   var eyev: Option[vector] = None
   var normalv: Option[vector] = None
