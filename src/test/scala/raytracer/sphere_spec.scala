@@ -76,5 +76,55 @@ class sphere_spec extends AnyFreeSpec {
       val xs = s.intersect(r)
       assert(xs.length == 0)
     }
+    "can find the normal at a point on the x axis" in {
+      val s = new sphere()
+      val n = s.normal_at(new point(1,0,0))
+      assert(n == new vector(1,0,0))
+    }
+    "can find the normal at a point on the y axis" in {
+      val s = new sphere()
+      val n = s.normal_at(new point(0,1,0))
+      assert(n == new vector(0,1,0))
+    }
+    "can find the normal at a point on the z axis" in {
+      val s = new sphere()
+      val n = s.normal_at(new point(0,0,1))
+      assert(n == new vector(0,0,1))
+    }
+    "can find the normal at a nonaxial point" in {
+      val s = new sphere()
+      val n = s.normal_at(new point(math.sqrt(3)/3,math.sqrt(3)/3,math.sqrt(3)/3))
+      assert(n == new vector(math.sqrt(3)/3,math.sqrt(3)/3,math.sqrt(3)/3))
+    }
+    "returns a normal which is normalized" in {
+      val s = new sphere()
+      val n = s.normal_at(new point(math.sqrt(3)/3,math.sqrt(3)/3,math.sqrt(3)/3))
+      assert(n == n.normalize())
+    }
+    "computes the normal on a translated sphere" in {
+      val s = new sphere()
+      s.set_transform(new translation(0,1,0))
+      val n = s.normal_at(new point(0,1.70711,-0.70711))
+      assert(n == new vector(0,0.70711,-0.70711))
+    }
+    "computes the normal on a transformed sphere" in {
+      val s = new sphere()
+      val m = new scaling(1, 0.5, 1) * new rotation_z(math.Pi/5)
+      s.set_transform(m)
+      val n = s.normal_at(new point(0, math.sqrt(2)/2, -math.sqrt(2)/2))
+      assert(n == new vector(0,0.97014,-0.24254))
+    }
+    "has a default material" in {
+      val s = new sphere()
+      val m = s.material
+      assert(m == new material())
+    }
+    "may be assigned a material" in {
+      val s = new sphere()
+      val m = new material()
+      m.ambient = 1
+      s.material = m
+      assert(s.material == m)
+    }
   }
 }

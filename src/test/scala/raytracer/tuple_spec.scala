@@ -114,5 +114,17 @@ class tuple_spec extends AnyFreeSpec {
       assert((a cross b) == new vector(-1, 2, -1))
       assert((b cross a) == new vector(1, -2, 1))
     }
+    "reflected with a 45 deg vector produces a vector" in {
+      val v = new vector(1,-1,0)
+      val n = new vector(0,1,0)
+      val r = v.reflect(n)
+      assert(r == new vector(1,1,0))
+    }
+    "reflected off a slanted surface produces a vector" in {
+      val v = new vector(0,-1,0)
+      val n = new vector(math.sqrt(2)/2,math.sqrt(2)/2,0)
+      val r = v.reflect(n)
+      assert(r == new vector(1,0,0))
+    }
   }
 }

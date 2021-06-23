@@ -73,6 +73,10 @@ class tuple(var x: Double, var y: Double, var z: Double, var w: Double) {
     new vector(this.y * that.z - this.z * that.y, this.z * that.x - this.x * that.z, this.x * that.y - this.y * that.x)
   }
 
+  def reflect(that: tuple): tuple = {
+    this - that * 2 * (this dot that)
+  }
+
   def to_point(): point = {
     new point(this.x, this.y, this.z)
   }
