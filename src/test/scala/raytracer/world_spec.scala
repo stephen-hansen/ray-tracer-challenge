@@ -74,5 +74,39 @@ class world_spec extends AnyFreeSpec {
       val c = w.color_at(r)
       assert(c == inner.material.color)
     }
+    "detects no shadow with object colinear to point and light" in {
+      val w = world.default_world()
+      val p = new point(0,10,0)
+      assert(!w.is_shadowed(p))
+    }
+    "detects shadow with object between point and light" in {
+      val w = world.default_world()
+      val p = new point(10,-10,10)
+      assert(w.is_shadowed(p))
+    }
+    "detects no shadow with object behind light" in {
+      val w = world.default_world()
+      val p = new point(-20,20,-20)
+      assert(!w.is_shadowed(p))
+    }
+    "detects no shadow with object behind point" in {
+      val w = world.default_world()
+      val p = new point(-2,2,-2)
+      assert(!w.is_shadowed(p))
+    }
+    "gives an intersection in shadow" in {
+      val w = new world()
+      w.light = Some(new point_light(new point(0,0,-10), new color(1,1,1)))
+      val s1 = new sphere()
+      w.add_object(s1)
+      val s2 = new sphere()
+      s2.set_transform(new translation(0,0,10))
+      w.add_object(s2)
+      val r = new ray(new point(0,0,5), new vector(0,0,1))
+      val i = new intersection(4,s2)
+      val comps = i.prepare_computations(r)
+      val c = w.shade_hit(comps)
+      assert(c == new color(0.1,0.1,0.1))
+    }
   }
 }

@@ -30,7 +30,8 @@ class world {
     final_intersections
   }
   def shade_hit(comps: computations): color = {
-    comps.`object`.get.material.lighting(this.light.get, comps.point.get, comps.eyev.get, comps.normalv.get)
+    val shadowed = this.is_shadowed(comps.over_point.get)
+    comps.`object`.get.material.lighting(this.light.get, comps.over_point.get, comps.eyev.get, comps.normalv.get, shadowed)
   }
   def color_at(r: ray): color = {
     val intersects = this.intersect_world(r)
@@ -40,6 +41,17 @@ class world {
     }
     val comps = hit.get.prepare_computations(r)
     this.shade_hit(comps)
+  }
+  def is_shadowed(point: point): Boolean = {
+    val v = this.light.get.position - point
+    val distance = v.magnitude()
+    val direction = v.normalize()
+
+    val r = new ray(point, direction.to_vector())
+    val intersections = this.intersect_world(r)
+
+    val h = intersections.hit()
+    h.isDefined && h.get.t < distance
   }
 }
 

@@ -18,10 +18,13 @@ class material {
     }
   }
 
-  def lighting(light: point_light, point: point, eyev: vector, normalv: vector) : color = {
+  def lighting(light: point_light, point: point, eyev: vector, normalv: vector, in_shadow: Boolean = false) : color = {
     val effective_color = this.color * light.intensity
     val lightv = (light.position - point).normalize()
     val ambient = effective_color * this.ambient
+    if (in_shadow) {
+      return ambient
+    }
     val light_dot_normal = lightv dot normalv
     var diffuse = new color(0,0,0)
     var specular = new color(0,0,0)

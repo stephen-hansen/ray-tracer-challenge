@@ -49,5 +49,13 @@ class material_spec extends AnyFreeSpec {
       val result = m.lighting(light, position, eyev, normalv)
       assert(result == new color(0.1,0.1,0.1))
     }
+    "has lighting with surface in shadow" in {
+      val eyev = new vector(0,0,-1)
+      val normalv = new vector(0,0,-1)
+      val light = new point_light(new point(0,0,-10), new color(1,1,1))
+      val in_shadow = true
+      val result = m.lighting(light, position, eyev, normalv, in_shadow)
+      assert(result == new color(0.1,0.1,0.1))
+    }
   }
 }

@@ -48,6 +48,17 @@ class intersection_spec extends AnyFreeSpec {
       assert(comps.inside.get)
       assert(comps.normalv.get == new vector(0,0,-1))
     }
+    "precomputes an offset point" in {
+      val r = new ray(new point(0,0,-5), new vector(0,0,1))
+      val shape = new sphere()
+      shape.set_transform(new translation(0,0,1))
+      val i = new intersection(5,shape)
+      val comps = i.prepare_computations(r)
+      assert(comps.over_point.isDefined)
+      assert(comps.over_point.get.z < -utils.EPSILON/2)
+      assert(comps.point.isDefined)
+      assert(comps.point.get.z > comps.over_point.get.z)
+    }
   }
   "An intersections" - {
     "aggregates multiple intersections" in {

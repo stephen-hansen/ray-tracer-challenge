@@ -14,6 +14,7 @@ class intersection(val t: Double, val `object`: scene_object) {
     } else {
       comps.inside = Some(false)
     }
+    comps.over_point = Some((comps.point.get + comps.normalv.get * utils.EPSILON).to_point())
     comps
   }
 }
