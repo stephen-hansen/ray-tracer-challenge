@@ -1,15 +1,27 @@
 package raytracer
 
 abstract class scene_object {
+  val id: String = java.util.UUID.randomUUID().toString // See page 59-60, needs to be unique
   var material: material = new material()
+  var transform: matrix = matrix.identity_matrix
   def normal_at(p: point): vector
+  def intersect(r: ray): intersections
+
+  def set_transform(t: matrix): Unit = {
+    this.transform = t
+  }
+
+  override def equals(obj: Any): Boolean = {
+    obj match {
+      case s: scene_object => (this.material == s.material) &&
+        (this.transform == s.transform)
+      case _ => false
+    }
+  }
 }
 
 class sphere extends scene_object {
-  val id: String = java.util.UUID.randomUUID().toString // See page 59-60, sphere needs to be unique
-  var transform: matrix = matrix.identity_matrix
-
-  def intersect(r: ray): intersections = {
+  override def intersect(r: ray): intersections = {
     val r2 = r.transform(this.transform.inverse())
     val sphere_to_ray = r2.origin - new point(0,0,0)
     val a = r2.direction dot r2.direction
@@ -22,10 +34,6 @@ class sphere extends scene_object {
     val t1 = (-b - math.sqrt(discriminant)) / (2*a)
     val t2 = (-b + math.sqrt(discriminant)) / (2*a)
     new intersections(new intersection(t1,this), new intersection(t2,this))
-  }
-
-  def set_transform(t: matrix): Unit = {
-    this.transform = t
   }
 
   override def normal_at(p: point): vector = {

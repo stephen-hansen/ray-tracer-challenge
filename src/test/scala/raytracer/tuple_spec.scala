@@ -54,6 +54,41 @@ class tuple_spec extends AnyFreeSpec {
       val p2 = new point(5, 6, 7)
       assert(p1 - p2 == new vector(-2, -4, -6))
     }
+    "produces a transformation for the default orientation" in {
+      val from = new point(0,0,0)
+      val to = new point(0,0,-1)
+      val up = new vector(0,1,0)
+      val t = from.view_transform(to, up)
+      assert(t == matrix.identity_matrix)
+    }
+    "produces a view transform in positive z direction" in {
+      val from = new point(0,0,0)
+      val to = new point(0,0,1)
+      val up = new vector(0,1,0)
+      val t = from.view_transform(to, up)
+      assert(t == new scaling(-1,1,-1))
+    }
+    "produces a view transform that moves the world" in {
+      val from = new point(0,0,8)
+      val to = new point(0,0,0)
+      val up = new vector(0,1,0)
+      val t = from.view_transform(to, up)
+      assert(t == new translation(0,0,-8))
+    }
+    "produces an arbitrary view transform" in {
+      val from = new point(1,3,2)
+      val to = new point(4,-2,8)
+      val up = new vector(1,1,0)
+      val t = from.view_transform(to, up)
+      assert(t == new matrix(
+        Array(
+          Array(-0.50709, 0.50709, 0.67612, -2.36643),
+          Array(0.76772, 0.60609, 0.12122, -2.82843),
+          Array(-0.35857, 0.59761, -0.71714, 0.00000),
+          Array(0.00000, 0.00000, 0.00000, 1.00000),
+        )
+      ))
+    }
   }
   "A vector" - {
     "creates tuples with w=0" in {

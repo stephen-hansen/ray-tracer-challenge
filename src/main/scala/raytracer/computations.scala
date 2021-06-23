@@ -1,0 +1,21 @@
+package raytracer
+
+class computations() {
+  var t: Option[Double] = None
+  var `object`: Option[scene_object] = None
+  var point: Option[point] = None
+  var eyev: Option[vector] = None
+  var normalv: Option[vector] = None
+  var inside: Option[Boolean] = None
+  override def equals(obj: Any): Boolean = {
+    obj match {
+      case c: computations => ((this.t.isEmpty && c.t.isEmpty) || utils.float_equals(this.t.get, c.t.get)) &&
+        (this.`object` == c.`object`) &&
+        (this.point == c.point) &&
+        (this.eyev == c.eyev) &&
+        (this.normalv == c.normalv) &&
+        (this.inside == c.inside)
+      case _ => false
+    }
+  }
+}

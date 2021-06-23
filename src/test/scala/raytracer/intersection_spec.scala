@@ -10,6 +10,44 @@ class intersection_spec extends AnyFreeSpec {
       assert(utils.float_equals(i.t, 3.5))
       assert(i.`object` == s)
     }
+    "precomputes the state of an intersection" in {
+      val r = new ray(new point(0,0,-5), new vector(0,0,1))
+      val shape = new sphere()
+      val i = new intersection(4, shape)
+      val comps = i.prepare_computations(r)
+      assert(comps.t.isDefined)
+      assert(comps.`object`.isDefined)
+      assert(comps.point.isDefined)
+      assert(comps.eyev.isDefined)
+      assert(comps.normalv.isDefined)
+      assert(utils.float_equals(comps.t.get, i.t))
+      assert(comps.`object`.get == i.`object`)
+      assert(comps.point.get == new point(0,0,-1))
+      assert(comps.eyev.get == new vector(0,0,-1))
+      assert(comps.normalv.get == new vector(0,0,-1))
+    }
+    "precomputes an intersection on the outside" in {
+      val r = new ray(new point(0,0,-5), new vector(0,0,1))
+      val shape = new sphere()
+      val i = new intersection(4, shape)
+      val comps = i.prepare_computations(r)
+      assert(comps.inside.isDefined)
+      assert(!comps.inside.get)
+    }
+    "precomputes an intersection on the inside" in {
+      val r = new ray(new point(0,0,0), new vector(0,0,1))
+      val shape = new sphere()
+      val i = new intersection(1, shape)
+      val comps = i.prepare_computations(r)
+      assert(comps.point.isDefined)
+      assert(comps.eyev.isDefined)
+      assert(comps.inside.isDefined)
+      assert(comps.normalv.isDefined)
+      assert(comps.point.get == new point(0,0,1))
+      assert(comps.eyev.get == new vector(0,0,-1))
+      assert(comps.inside.get)
+      assert(comps.normalv.get == new vector(0,0,-1))
+    }
   }
   "An intersections" - {
     "aggregates multiple intersections" in {

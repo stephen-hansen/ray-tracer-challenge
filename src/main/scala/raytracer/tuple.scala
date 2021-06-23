@@ -77,6 +77,22 @@ class tuple(var x: Double, var y: Double, var z: Double, var w: Double) {
     this - that * 2 * (this dot that)
   }
 
+  def view_transform(to: point, up: vector): matrix = {
+    val forward = (to - this).normalize()
+    val upn = up.normalize()
+    val left = forward cross upn
+    val true_up = left cross forward
+    val orientation = new matrix(
+      Array(
+        Array(left.x, left.y, left.z, 0),
+        Array(true_up.x, true_up.y, true_up.z, 0),
+        Array(-forward.x, -forward.y, -forward.z, 0),
+        Array(0,0,0,1),
+      )
+    )
+    orientation * new translation(-this.x, -this.y, -this.z)
+  }
+
   def to_point(): point = {
     new point(this.x, this.y, this.z)
   }
