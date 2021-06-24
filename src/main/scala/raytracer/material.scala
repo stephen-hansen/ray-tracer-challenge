@@ -6,6 +6,7 @@ class material {
   var diffuse: Double = 0.9
   var specular: Double = 0.9
   var shininess: Double = 200.0
+  var pattern: Option[pattern] = None
 
   override def equals(obj: Any): Boolean = {
     obj match {
@@ -13,13 +14,20 @@ class material {
         utils.float_equals(this.ambient, m.ambient) &&
         utils.float_equals(this.diffuse, m.diffuse) &&
         utils.float_equals(this.specular, m.specular) &&
-        utils.float_equals(this.shininess, m.shininess)
+        utils.float_equals(this.shininess, m.shininess) &&
+        (this.pattern == m.pattern)
       case _ => false
     }
   }
 
-  def lighting(light: point_light, point: point, eyev: vector, normalv: vector, in_shadow: Boolean = false) : color = {
-    val effective_color = this.color * light.intensity
+  def lighting(`object`: shape, light: point_light, point: point, eyev: vector, normalv: vector, in_shadow: Boolean = false) : color = {
+    var color = new color(0,0,0)
+    if (this.pattern.isDefined) {
+      color = this.pattern.get.pattern_at_shape(`object`, point)
+    } else {
+      color = this.color
+    }
+    val effective_color = color * light.intensity
     val lightv = (light.position - point).normalize()
     val ambient = effective_color * this.ambient
     if (in_shadow) {

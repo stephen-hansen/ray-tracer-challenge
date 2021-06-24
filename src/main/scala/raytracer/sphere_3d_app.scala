@@ -29,7 +29,7 @@ object sphere_3d_app extends App {
         val point = r.position(hit.t)
         val normal = hit.`object`.normal_at(point)
         val eye = (-r.direction).to_vector()
-        val color = hit.`object`.material.lighting(light, point, eye, normal)
+        val color = hit.`object`.material.lighting(hit.`object`, light, point, eye, normal)
         c.write_pixel(x,y,color)
       }
     }

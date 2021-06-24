@@ -31,7 +31,7 @@ class world {
   }
   def shade_hit(comps: computations): color = {
     val shadowed = this.is_shadowed(comps.over_point.get)
-    comps.`object`.get.material.lighting(this.light.get, comps.over_point.get, comps.eyev.get, comps.normalv.get, shadowed)
+    comps.`object`.get.material.lighting(comps.`object`.get, this.light.get, comps.over_point.get, comps.eyev.get, comps.normalv.get, shadowed)
   }
   def color_at(r: ray): color = {
     val intersects = this.intersect_world(r)

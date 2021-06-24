@@ -99,7 +99,7 @@ class intersection_spec extends AnyFreeSpec {
       val xs = new intersections(i2, i1)
       val i = xs.hit()
       i match {
-        case Some(v) => throw new RuntimeException("Expected no hit")
+        case Some(_) => throw new RuntimeException("Expected no hit")
         case None => true
       }
     }
